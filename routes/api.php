@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LayananController;
 use App\Http\Controllers\Api\LayananTambahanController;
+use App\Http\Controllers\Api\UkuranKendaraanController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('autospark/layanans', LayananController::class);
 Route::apiResource('autospark/layanan-tambahans', LayananTambahanController::class);
+Route::apiResource('autospark/ukuran-kendaraans', UkuranKendaraanController::class);
