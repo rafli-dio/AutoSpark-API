@@ -19,28 +19,20 @@ use App\Http\Controllers\Api\UkuranKendaraanController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::apiResource('autospark/roles', RoleController::class);
-// Route::apiResource('autospark/users', UserController::class);
-// Route::apiResource('autospark/layanans', LayananController::class);
-// Route::apiResource('autospark/layanan-tambahans', LayananTambahanController::class);
-// Route::apiResource('autospark/ukuran-kendaraans', UkuranKendaraanController::class);
 Route::prefix('autospark')->group(function () {
     // Public Routes
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+    Route::apiResource('/roles', RoleController::class);
 
     // jika role admin
     Route::middleware(['auth:sanctum', 'role:Admin'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::apiResource('roles', RoleController::class);
-        Route::apiResource('/users', UserController::class);
-        Route::apiResource('/layanans', LayananController::class);
-        Route::apiResource('/layanan-tambahans', LayananTambahanController::class);
-        Route::apiResource('/ukuran-kendaraans', UkuranKendaraanController::class);
+
+        Route::apiResource('/users-admin', UserController::class);
+        Route::apiResource('/layanans-admin', LayananController::class);
+        Route::apiResource('/layanan-tambahans-admin', LayananTambahanController::class);
+        Route::apiResource('/ukuran-kendaraans-admin', UkuranKendaraanController::class);
     });
 
     // jika role pengguna
@@ -48,7 +40,6 @@ Route::prefix('autospark')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
         Route::get('/layanans', [LayananController::class, 'index']);
-        Route::get('/layanan-tambahans', [LayananController::class, 'index']);
         Route::get('/layanan-tambahans', [LayananTambahanController::class, 'index']);
         Route::get('/ukuran-kendaraans', [UkuranKendaraanController::class, 'index']);
     });
