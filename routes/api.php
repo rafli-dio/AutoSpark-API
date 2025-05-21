@@ -33,14 +33,23 @@ Route::prefix('autospark')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 
-    // Protected Routes (butuh token Sanctum)
-    Route::middleware('auth:sanctum')->group(function () {
+    // jika role admin
+    Route::middleware(['auth:sanctum', 'role:Admin'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
-
-        Route::apiResource('/roles', RoleController::class);
+        Route::apiResource('roles', RoleController::class);
         Route::apiResource('/users', UserController::class);
         Route::apiResource('/layanans', LayananController::class);
         Route::apiResource('/layanan-tambahans', LayananTambahanController::class);
         Route::apiResource('/ukuran-kendaraans', UkuranKendaraanController::class);
+    });
+
+    // jika role pengguna
+    Route::middleware(['auth:sanctum', 'role:Pengguna'])->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        Route::get('/layanans', [LayananController::class, 'index']);
+        Route::get('/layanan-tambahans', [LayananController::class, 'index']);
+        Route::get('/layanan-tambahans', [LayananTambahanController::class, 'index']);
+        Route::get('/ukuran-kendaraans', [UkuranKendaraanController::class, 'index']);
     });
 });

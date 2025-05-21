@@ -68,6 +68,7 @@ class AuthController extends Controller
                 'password' => 'required',
             ]);
 
+
             $user = User::where('email', $request->email)->first();
 
             if (!$user || !Hash::check($request->password, $user->password)) {
@@ -76,7 +77,6 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Jika berhasil login
             return response()->json([
                 'message' => 'Login berhasil',
                 'token' => $user->createToken('auth_token')->plainTextToken,
