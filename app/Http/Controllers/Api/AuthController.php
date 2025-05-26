@@ -17,7 +17,7 @@ class AuthController extends Controller
                 'nama' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users',
                 'password' => 'sometimes|string|min:8',
-                'role_id' => 'required|exists:roles,id',
+                'role_id' => 'nullable|exists:roles,id',
                 'nomor_telepon' => 'nullable|string|max:20',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
@@ -33,7 +33,7 @@ class AuthController extends Controller
                 'nama' => $request->nama,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role_id' => $request->role_id,
+                'role_id' => $request->role_id ?? 2,
                 'nomor_telepon' => $request->nomor_telepon,
                 'foto' => $fotoPath,
             ]);

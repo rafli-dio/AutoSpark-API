@@ -21,8 +21,9 @@ class LayananTambahan extends Model
     /**
      * Relasi ke pesanan melalui tabel pivot
      */
-    public function pesanan()
+    public function pesanancucis()
     {
-        return $this->belongsToMany(Pesanan::class, 'pesanan_layanan_tambahan');
+        return $this->belongsToMany(PesananCuci::class);
     }
 }
+

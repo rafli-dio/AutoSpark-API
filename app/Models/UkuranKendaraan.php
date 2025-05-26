@@ -15,4 +15,9 @@ class UkuranKendaraan extends Model
         'ukuran',
         'harga',
     ];
+
+    public function pesanancucis()
+    {
+        return $this->belongsToMany(PesananCuci::class);
+    }
 }

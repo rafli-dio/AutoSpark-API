@@ -17,4 +17,9 @@ class Layanan extends Model
         'harga',
         'gambar',
     ];
+
+    public function pesanancucis()
+    {
+        return $this->belongsToMany(PesananCuci::class);
+    }
 }

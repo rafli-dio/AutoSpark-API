@@ -8,6 +8,9 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\LayananController;
 use App\Http\Controllers\Api\LayananTambahanController;
 use App\Http\Controllers\Api\UkuranKendaraanController;
+use App\Http\Controllers\Api\PesananCuciController;
+use App\Http\Controllers\Api\RiwayatPesananController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,6 +36,8 @@ Route::prefix('autospark')->group(function () {
         Route::apiResource('/layanans-admin', LayananController::class);
         Route::apiResource('/layanan-tambahans-admin', LayananTambahanController::class);
         Route::apiResource('/ukuran-kendaraans-admin', UkuranKendaraanController::class);
+        Route::apiResource('/pesanan-cucis-admin', PesananCuciController::class);
+        Route::apiResource('/riwayat-pesanans-admin', RiwayatPesananController::class);
     });
 
     // jika role pengguna
@@ -42,5 +47,7 @@ Route::prefix('autospark')->group(function () {
         Route::get('/layanans', [LayananController::class, 'index']);
         Route::get('/layanan-tambahans', [LayananTambahanController::class, 'index']);
         Route::get('/ukuran-kendaraans', [UkuranKendaraanController::class, 'index']);
+        Route::post('/pesanan-cucis', [PesananCuciController::class, 'store']);
+        Route::get('/riwayat-pesanans', [RiwayatPesananController::class, 'index']);
     });
 });
