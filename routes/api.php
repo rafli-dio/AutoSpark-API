@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\LayananTambahanController;
 use App\Http\Controllers\Api\UkuranKendaraanController;
 use App\Http\Controllers\Api\PesananCuciController;
 use App\Http\Controllers\Api\RiwayatPesananController;
+use App\Http\Controllers\Api\UserProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +50,7 @@ Route::prefix('autospark')->group(function () {
         Route::get('/ukuran-kendaraans', [UkuranKendaraanController::class, 'index']);
         Route::post('/pesanan-cucis', [PesananCuciController::class, 'store']);
         Route::get('/riwayat-pesanans', [RiwayatPesananController::class, 'index']);
+        Route::get('/profile-pengguna', [UserProfileController::class, 'getProfile']);
+        Route::post('/profile-pengguna', [UserProfileController::class, 'updateProfile']);
     });
 });
