@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\PesananCuci;
 use App\Models\RiwayatPesanan;
+use App\Models\Layanan;
+use App\Models\LayananTambahan;
+use App\Models\UkuranKendaraan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,6 +29,20 @@ class PesananCuciController extends Controller
             ], 500);
         }
     }
+
+    public function getOptions()
+    {
+        $layanans = Layanan::all();
+        $layananTambahans = LayananTambahan::all();
+        $ukuranKendaraans = UkuranKendaraan::all();
+
+        return response()->json([
+            'layanans' => $layanans,
+            'layanan_tambahans' => $layananTambahans,
+            'ukuran_kendaraans' => $ukuranKendaraans,
+        ]);
+    }
+
 
     public function store(Request $request)
     {
