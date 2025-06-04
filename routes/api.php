@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\UkuranKendaraanController;
 use App\Http\Controllers\Api\PesananCuciController;
 use App\Http\Controllers\Api\RiwayatPesananController;
 use App\Http\Controllers\Api\UserProfileController;
+use App\Http\Controllers\Api\MetodePembayaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::prefix('autospark')->group(function () {
         Route::apiResource('/ukuran-kendaraans-admin', UkuranKendaraanController::class);
         Route::apiResource('/pesanan-cucis-admin', PesananCuciController::class);
         Route::apiResource('/riwayat-pesanans-admin', RiwayatPesananController::class);
+        Route::apiResource('/metode-pembayarans-admin', MetodePembayaranController::class);
     });
 
     // jika role pengguna
