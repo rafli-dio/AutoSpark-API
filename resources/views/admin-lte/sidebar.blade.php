@@ -5,64 +5,57 @@
     overflow-x: hidden;      
   }
 </style>
-
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="index3.html" class="brand-link">
     <img src="/adminlte/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light">Karaka</span>
+    <span class="brand-text font-weight-light">Admin AutoSpark</span>
   </a>
-
   <!-- Sidebar -->
   <div class="sidebar">
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        
         <!-- Dashboard -->
-        <li class="nav-header">Dashboard</li>
+
         <li class="nav-item">
-          <a href="{{ route('dashboard-admin') }}" class="nav-link @yield('active-dashboard')">
+          <a href="{{ route('get-dashboard-admin') }}" class="nav-link @yield('active-dashboard')">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
-
-        <!-- Lapangan Basket -->
+        <!-- Layanan Cuci -->
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
-            <i class="fas fa-basketball-ball nav-icon"></i>
+            <i class="fas fa-shower nav-icon"></i>
             <p>
-              Lapangan Basket
+              Pesanan Cuci
               <i class="right fas fa-angle-left"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ route('booking-lapangan-admin') }}" class="nav-link @yield('active-booking')">
+              <a href="" class="nav-link @yield('active-booking')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Data Booking</p>
+                <p>Data Pesanan</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('status-booking-admin') }}" class="nav-link @yield('active-pembayaran')">
+              <a href="" class="nav-link @yield('active-pembayaran')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Status Booking</p>
+                <p>Status Pesanan</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="" class="nav-link @yield('active-pembayaran')">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Riwayat Pesanan</p>
               </a>
             </li>
           </ul>
         </li>
+        
 
-        <!-- Admin Section -->
-        <li class="nav-header">ADMIN</li>
-        <li class="nav-item">
-          <a href="{{ route('get-admin-user') }}" class="nav-link @yield('active-user')">
-            <i class="fas fa-users nav-icon"></i>
-            <p>User</p>
-          </a>
-        </li>
-        <!-- Master Data Section -->
-        <li class="nav-header">MASTER DATA</li>
 
         <li class="nav-item has-treeview">
           <a href="#" class="nav-link">
@@ -74,18 +67,32 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="{{ route('kategori-barang-admin') }}" class="nav-link @yield('active-kategori')">
+              <a href="{{route('get-layanan-admin')}}" class="nav-link @yield('active-layanan')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Kategori</p>
+                <p>Layanan</p>
               </a>
             </li>
             <li class="nav-item">
               <a href="" class="nav-link @yield('active-satuan')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Satuan</p>
+                <p>Layanan Tambahan</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="" class="nav-link @yield('active-satuan')">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Methode Pembayaran</p>
               </a>
             </li>
           </ul>
+        </li>
+        <!-- Admin Section -->
+
+        <li class="nav-item">
+          <a href="" class="nav-link @yield('active-user')">
+            <i class="fas fa-users nav-icon"></i>
+            <p>User</p>
+          </a>
         </li>
       </ul>
     </nav>
