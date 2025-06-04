@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Layanan;
+use App\Models\LayananTambahan;
 use Illuminate\Support\Facades\Storage;
 
-
-class LayananController extends Controller
+class LayananTambahanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +16,10 @@ class LayananController extends Controller
      */
     public function index()
     {
-        $layanan = Layanan::all();
-        return view('Admin.layanan.index',compact('layanan'));
+        $layananTambahan = LayananTambahan::all();
+        return view('Admin.layanan-tambahan.index',compact('layananTambahan'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -29,7 +29,7 @@ class LayananController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+         $request->validate([
             'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'harga' => 'required|numeric',
@@ -41,14 +41,14 @@ class LayananController extends Controller
             $path = $request->file('gambar')->store('layanan', 'public');
         }
 
-        Layanan::create([
+        LayananTambahan::create([
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'harga' => $request->harga,
             'gambar' => $path,
         ]);
 
-        return redirect()->back()->with('success', 'Layanan berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Layanan Tambahan berhasil ditambahkan.');
     }
 
     /**
@@ -63,6 +63,13 @@ class LayananController extends Controller
     }
 
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -72,7 +79,7 @@ class LayananController extends Controller
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $layanan = Layanan::findOrFail($id);
+        $layanan = layananTambahan::findOrFail($id);
 
         // Update gambar jika diunggah
         if ($request->hasFile('gambar')) {
@@ -89,7 +96,7 @@ class LayananController extends Controller
         $layanan->harga = $request->harga;
         $layanan->save();
 
-        return redirect()->back()->with('success', 'Layanan berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Layanan Tambahan berhasil diperbarui.');
     }
 
     /**
@@ -100,7 +107,7 @@ class LayananController extends Controller
      */
     public function destroy($id)
     {
-        $layanan = Layanan::findOrFail($id);
+        $layanan = LayananTambahan::findOrFail($id);
 
         if ($layanan->gambar && \Storage::disk('public')->exists($layanan->gambar)) {
             \Storage::disk('public')->delete($layanan->gambar);
@@ -110,5 +117,4 @@ class LayananController extends Controller
 
         return redirect()->back()->with('success', 'Layanan berhasil dihapus.');
     }
-
 }

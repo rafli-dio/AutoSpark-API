@@ -73,7 +73,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link @yield('active-satuan')">
+              <a href="{{route('get-layanan-tambahan-admin')}}" class="nav-link @yield('active-layanan-tambahan')">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Layanan Tambahan</p>
               </a>
