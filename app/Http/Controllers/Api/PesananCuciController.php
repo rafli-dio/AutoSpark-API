@@ -48,7 +48,7 @@ class PesananCuciController extends Controller
         'waktu' => 'required',
         'plat_nomor' => 'required|string',
         'ukuran_kendaraan_id' => 'required|exists:ukuran_kendaraans,id',
-        'status' => 'in:pending,diproses,selesai'
+        'status' => 'in:menunggu verifikasi,berhasil,gagal'
     ]);
 
     if ($validator->fails()) {
@@ -82,7 +82,7 @@ class PesananCuciController extends Controller
             'ukuran_kendaraan_id' => $request->ukuran_kendaraan_id,
             'subtotal' => $subtotal,
             'total' => $total,
-            'status' => $request->status ?? 'pending',
+            'status' => $request->status ?? 'menunggu verifikasi',
         ]);
 
       
@@ -136,7 +136,7 @@ class PesananCuciController extends Controller
             'ukuran_kendaraan_id' => 'sometimes|exists:ukuran_kendaraans,id',
             'subtotal' => 'sometimes|integer',
             'total' => 'sometimes|integer',
-            'status' => 'sometimes|in:pending,diproses,selesai'
+            'status' => 'in:menunggu verifikasi,berhasil,gagal'
         ]);
 
         if ($validator->fails()) {
