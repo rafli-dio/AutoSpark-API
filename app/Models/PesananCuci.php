@@ -15,9 +15,8 @@ class PesananCuci extends Model
         'user_id',
         'layanan_id',
         'layanan_tambahan_id',
+        'metode_pembayaran_id',
         'alamat',
-        'latitude',
-        'longitude',
         'tanggal',
         'waktu',
         'plat_nomor',
@@ -45,6 +44,11 @@ class PesananCuci extends Model
         return $this->belongsTo(LayananTambahan::class);
     }
 
+    public function metodePembayaran()
+    {
+        return $this->belongsTo(MetodePembayaran::class);
+    }
+
     // Relasi dengan Ukuran Kendaraan
     public function ukuranKendaraan()
     {
@@ -56,4 +60,6 @@ class PesananCuci extends Model
     {
         return $this->hasMany(RiwayatPesanan::class, 'pesanan_id');
     }
+
+
 }
