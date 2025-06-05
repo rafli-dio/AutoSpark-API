@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\PesananCuciController;
 use App\Http\Controllers\Api\RiwayatPesananController;
 use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\Api\MetodePembayaranController;
+use App\Http\Controllers\Api\PembayaranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +40,8 @@ Route::prefix('autospark')->group(function () {
         Route::apiResource('/layanan-tambahans-admin', LayananTambahanController::class);
         Route::apiResource('/ukuran-kendaraans-admin', UkuranKendaraanController::class);
         Route::apiResource('/pesanan-cucis-admin', PesananCuciController::class);
-        Route::apiResource('/riwayat-pesanans-admin', RiwayatPesananController::class);
         Route::apiResource('/metode-pembayarans-admin', MetodePembayaranController::class);
+        Route::apiResource('/pembayarans-admin', PembayaranController::class);
     });
 
     // jika role pengguna
@@ -52,8 +53,12 @@ Route::prefix('autospark')->group(function () {
         Route::get('/ukuran-kendaraans', [UkuranKendaraanController::class, 'index']);
         Route::get('/options', [PesananCuciController::class, 'getOptions']);
         Route::post('/pesanan-cucis', [PesananCuciController::class, 'store']);
-        Route::get('/riwayat-pesanans', [RiwayatPesananController::class, 'index']);
+        // profile
         Route::get('/profile-pengguna', [UserProfileController::class, 'getProfile']);
         Route::post('/profile-pengguna', [UserProfileController::class, 'updateProfile']);
+        // pembayaran
+        Route::get('/pembayaran-cucian', [PembayaranController::class, 'index']);
+        Route::post('/pembayaran-cucian', [PembayaranController::class, 'store']);
+        Route::get('/get-metode-pembayaran-ui', [PembayaranController::class, 'getMetodePembayaran']);
     });
 });

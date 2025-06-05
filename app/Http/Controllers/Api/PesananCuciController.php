@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\PesananCuci;
-use App\Models\RiwayatPesanan;
 use App\Models\Layanan;
 use App\Models\LayananTambahan;
 use App\Models\UkuranKendaraan;
@@ -16,7 +15,7 @@ class PesananCuciController extends Controller
     public function index()
     {
         try {
-            $pesanan = PesananCuci::with(['user', 'layanan', 'layananTambahan', 'ukuranKendaraan', 'metodePembayaran'])->get();
+            $pesanan = PesananCuci::with(['user', 'layanan', 'layananTambahan', 'ukuranKendaraan'])->get();
 
             return response()->json([
                 'message' => 'Data pesanan cuci berhasil diambil.',
@@ -49,7 +48,6 @@ class PesananCuciController extends Controller
         'waktu' => 'required',
         'plat_nomor' => 'required|string',
         'ukuran_kendaraan_id' => 'required|exists:ukuran_kendaraans,id',
-        'metode_pembayaran_id' => 'required|exists:metode_pembayarans,id',
         'status' => 'in:pending,diproses,selesai'
     ]);
 
@@ -82,17 +80,12 @@ class PesananCuciController extends Controller
             'waktu' => $request->waktu,
             'plat_nomor' => $request->plat_nomor,
             'ukuran_kendaraan_id' => $request->ukuran_kendaraan_id,
-            'metode_pembayaran_id' => $request->metode_pembayaran_id,
             'subtotal' => $subtotal,
             'total' => $total,
             'status' => $request->status ?? 'pending',
         ]);
 
-        // Simpan riwayat
-        RiwayatPesanan::create([
-            'pesanan_id' => $pesanan->id,
-            'status' => $pesanan->status
-        ]);
+      
 
         return response()->json([
             'message' => 'Pesanan berhasil dibuat.',
@@ -117,7 +110,7 @@ class PesananCuciController extends Controller
     public function show($id)
     {
         try {
-            $pesanan = PesananCuci::with(['user', 'layanan', 'layananTambahan', 'ukuranKendaraan', 'metodePembayaran'])->findOrFail($id);
+            $pesanan = PesananCuci::with(['user', 'layanan', 'layananTambahan', 'ukuranKendaraan'])->findOrFail($id);
 
             return response()->json([
                 'message' => 'Detail pesanan ditemukan.',
@@ -141,7 +134,6 @@ class PesananCuciController extends Controller
             'waktu' => 'sometimes',
             'plat_nomor' => 'sometimes|string',
             'ukuran_kendaraan_id' => 'sometimes|exists:ukuran_kendaraans,id',
-            'metode_pembayaran_id' => 'sometimes|exists:metode_pembayarans,id',
             'subtotal' => 'sometimes|integer',
             'total' => 'sometimes|integer',
             'status' => 'sometimes|in:pending,diproses,selesai'
@@ -158,7 +150,7 @@ class PesananCuciController extends Controller
             $pesanan = PesananCuci::findOrFail($id);
             $pesanan->update($request->only([
                 'layanan_id', 'layanan_tambahan_id', 'alamat', 'tanggal',
-                'waktu', 'plat_nomor', 'ukuran_kendaraan_id', 'metode_pembayaran_id', 'subtotal',
+                'waktu', 'plat_nomor', 'ukuran_kendaraan_id','subtotal',
                 'total', 'status'
             ]));
 
