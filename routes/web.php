@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LayananController;
 use App\Http\Controllers\Web\LayananTambahanController;
+use App\Http\Controllers\Web\MetodePembayaranController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('post-login');
@@ -23,6 +24,12 @@ Route::middleware('admin.web')->group(function () {
     Route::post('save-layanan-tambahan-admin', [LayananTambahanController::class, 'store'])->name('save-layanan-tambahan-admin');
     Route::put('/admin-autoSpark/layanan-tambahan/{id}', [LayananTambahanController::class, 'update'])->name('update-layanan-tambahan-admin');
     Route::delete('/admin-autoSpark/layanan-tambahan/{id}', [LayananTambahanController::class, 'destroy'])->name('destroy-layanan-tambahan-admin');
+
+    // Metode Pembayaran Routes
+    Route::get('/admin-autoSpark/metode-pembayaran', [MetodePembayaranController::class, 'index'])->name('get-metode-pembayaran-admin');
+    Route::post('save-metode-pembayaran-admin', [MetodePembayaranController::class, 'store'])->name('save-metode-pembayaran-admin');
+    Route::put('/admin-autoSpark/metode-pembayaran/{id}', [MetodePembayaranController::class, 'update'])->name('update-metode-pembayaran-admin');
+    Route::delete('/admin-autoSpark/metode-pembayaran/{id}', [MetodePembayaranController::class, 'destroy'])->name('destroy-metode-pembayaran-admin');
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

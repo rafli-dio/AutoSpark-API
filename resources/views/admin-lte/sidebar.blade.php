@@ -79,9 +79,9 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link @yield('active-satuan')">
+              <a href="{{route('get-metode-pembayaran-admin')}}" class="nav-link @yield('active-metode-pembayaran')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Methode Pembayaran</p>
+                <p>Metode Pembayaran</p>
               </a>
             </li>
           </ul>
