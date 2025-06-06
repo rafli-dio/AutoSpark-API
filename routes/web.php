@@ -38,7 +38,7 @@ Route::middleware('admin.web')->group(function () {
 
     // Pembayaran Routes
     Route::get('/admin-autoSpark/pembayaran', [PembayaranController::class, 'index'])->name('get-pembayaran-admin');
-
+    Route::put('/admin-autoSpark/pembayaran/{id}/update-status', [PembayaranController::class, 'updateStatus'])->name('update-status-pembayaran-admin');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

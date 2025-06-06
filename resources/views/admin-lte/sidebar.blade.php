@@ -35,21 +35,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="" class="nav-link @yield('active-booking')">
+              <a href="{{route('get-pesanan-cuci-admin')}}" class="nav-link @yield('active-pesanan')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Data Pesanan</p>
+                <p>Pesanan</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link @yield('active-pembayaran')">
+              <a href="{{route('get-pembayaran-admin')}}" class="nav-link @yield('active-pembayaran')">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Status Pesanan</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="nav-link @yield('active-pembayaran')">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Riwayat Pesanan</p>
+                <p>Pembayaran</p>
               </a>
             </li>
           </ul>

@@ -41,7 +41,10 @@ Route::prefix('autospark')->group(function () {
         Route::apiResource('/ukuran-kendaraans-admin', UkuranKendaraanController::class);
         Route::apiResource('/pesanan-cucis-admin', PesananCuciController::class);
         Route::apiResource('/metode-pembayarans-admin', MetodePembayaranController::class);
+        
         Route::apiResource('/pembayarans-admin', PembayaranController::class);
+        Route::put('/pembayaran/{id}/update-status', [PembayaranController::class, 'updateStatus']);
+
     });
 
     // jika role pengguna
