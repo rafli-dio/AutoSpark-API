@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\LayananController;
 use App\Http\Controllers\Web\LayananTambahanController;
+use App\Http\Controllers\Web\UkuranKendaraanController;
 use App\Http\Controllers\Web\MetodePembayaranController;
 use App\Http\Controllers\Web\PesananController;
 use App\Http\Controllers\Web\PembayaranController;
@@ -33,6 +34,12 @@ Route::middleware('admin.web')->group(function () {
     Route::post('save-metode-pembayaran-admin', [MetodePembayaranController::class, 'store'])->name('save-metode-pembayaran-admin');
     Route::put('/admin-autoSpark/metode-pembayaran/{id}', [MetodePembayaranController::class, 'update'])->name('update-metode-pembayaran-admin');
     Route::delete('/admin-autoSpark/metode-pembayaran/{id}', [MetodePembayaranController::class, 'destroy'])->name('destroy-metode-pembayaran-admin');
+
+    // Ukuran Kendaraan Routes
+    Route::get('/admin-autoSpark/ukuran-kendaraan', [UkuranKendaraanController::class, 'index'])->name('get-ukuran-kendaraan-admin');
+    Route::post('save-ukuran-kendaraan-admin', [UkuranKendaraanController::class, 'store'])->name('save-ukuran-kendaraan-admin');
+    Route::put('/admin-autoSpark/ukuran-kendaraan/{id}', [UkuranKendaraanController::class, 'update'])->name('update-ukuran-kendaraan-admin');
+    Route::delete('/admin-autoSpark/ukuran-kendaraan/{id}', [UkuranKendaraanController::class, 'destroy'])->name('destroy-ukuran-kendaraan-admin');
 
     // Pesanan Routes
     Route::get('/admin-autoSpark/pesanan-cuci', [PesananController::class, 'index'])->name('get-pesanan-cuci-admin');

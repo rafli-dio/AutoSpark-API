@@ -78,6 +78,12 @@
                 <p>Metode Pembayaran</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="{{route('get-ukuran-kendaraan-admin')}}" class="nav-link @yield('active-metode-pembayaran')">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ukuran Kendaraan</p>
+              </a>
+            </li>
           </ul>
         </li>
         <!-- Admin Section -->
