@@ -81,12 +81,34 @@
           </ul>
         </li>
         <!-- Admin Section -->
-
-        <li class="nav-item">
-          <a href="" class="nav-link @yield('active-user')">
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
             <i class="fas fa-users nav-icon"></i>
-            <p>User</p>
+            <p>
+              User
+              <i class="right fas fa-angle-left"></i>
+            </p>
           </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="{{route('get-user-admin')}}" class="nav-link @yield('active-admin')">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Admin</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{route('get-user-pegawai')}}" class="nav-link @yield('active-pegawai')">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Pegawai</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{route('get-user-pengguna')}}" class="nav-link @yield('active-pengguna')">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Pengguna</p>
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>

@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\LayananTambahanController;
 use App\Http\Controllers\Web\MetodePembayaranController;
 use App\Http\Controllers\Web\PesananController;
 use App\Http\Controllers\Web\PembayaranController;
+use App\Http\Controllers\Web\UserController;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('post-login');
@@ -39,6 +40,11 @@ Route::middleware('admin.web')->group(function () {
     // Pembayaran Routes
     Route::get('/admin-autoSpark/pembayaran', [PembayaranController::class, 'index'])->name('get-pembayaran-admin');
     Route::put('/admin-autoSpark/pembayaran/{id}/update-status', [PembayaranController::class, 'updateStatus'])->name('update-status-pembayaran-admin');
+
+    //User Routes
+    Route::get('/admin-autoSpark/user/admin', [UserController::class, 'getAdmin'])->name('get-user-admin');
+    Route::get('/admin-autoSpark/user/pegawai', [UserController::class, 'getPewagai'])->name('get-user-pegawai');
+    Route::get('/admin-autoSpark/user/pengguna', [UserController::class, 'getPengguna'])->name('get-user-pengguna');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
