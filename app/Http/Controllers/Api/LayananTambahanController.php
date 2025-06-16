@@ -103,7 +103,6 @@ class LayananTambahanController extends Controller
             ]);
 
             if ($request->hasFile('gambar')) {
-                // Hapus gambar lama
                 if ($layananTambahan->gambar) {
                     Storage::disk('public')->delete($layananTambahan->gambar);
                 }

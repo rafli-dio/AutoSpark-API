@@ -56,6 +56,10 @@ Route::prefix('autospark')->group(function () {
         Route::get('/ukuran-kendaraans', [UkuranKendaraanController::class, 'index']);
         Route::get('/options', [PesananCuciController::class, 'getOptions']);
         Route::post('/pesanan-cucis', [PesananCuciController::class, 'store']);
+        Route::get('/pesanan-cucis', [PesananCuciController::class, 'index']);
+        Route::get('/pesanan-cucis-user', [PesananCuciController::class, 'getOrders']);
+        Route::get('pesanan-cucis/{id}', [PesananCuciController::class, 'show']);
+
         // profile
         Route::get('/profile-pengguna', [UserProfileController::class, 'getProfile']);
         Route::post('/profile-pengguna', [UserProfileController::class, 'updateProfile']);

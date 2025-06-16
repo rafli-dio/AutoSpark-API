@@ -30,6 +30,11 @@
                         <label for="atas_nama" class="form-label">Atas Nama</label>
                         <input type="text" class="form-control" id="atas_nama" name="atas_nama" required>
                     </div>
+                    {{-- BARU: Input untuk upload logo --}}
+                    <div class="mb-3">
+                        <label for="logo" class="form-label">Logo</label>
+                        <input type="file" class="form-control" id="logo" name="logo">
+                    </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
@@ -48,7 +53,8 @@
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('update-metode-pembayaran-admin', $item->id) }}">
+                {{-- PERBAIKAN: Tambahkan enctype untuk upload file --}}
+                <form method="POST" action="{{ route('update-metode-pembayaran-admin', $item->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="mb-3">
@@ -67,6 +73,17 @@
                         <label for="atas_nama" class="form-label">Atas Nama</label>
                         <input type="text" class="form-control" id="atas_nama" name="atas_nama" value="{{ $item->atas_nama }}" required>
                     </div>
+                    {{-- BARU: Pratinjau logo saat ini dan input untuk logo baru --}}
+                    <div class="mb-3">
+                        <label for="logo" class="form-label">Logo Baru (Opsional)</label>
+                        <input type="file" class="form-control" id="logo" name="logo">
+                        @if($item->logo_url)
+                            <div class="mt-2">
+                                <small>Logo Saat Ini:</small><br>
+                                <img src="{{ $item->logo_url }}" alt="{{ $item->nama }}" height="50">
+                            </div>
+                        @endif
+                    </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>
@@ -75,10 +92,10 @@
 </div>
 @endforeach
 
-<div class="card mt-3"> 
+<div class="card mt-3">
 <div class="card-header d-flex justify-content-between align-items-center">
     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createMetodeModal">Tambah</button>
-    <div class="input-group input-group-sm ml-auto" style="width: 200px;"> 
+    <div class="input-group input-group-sm ml-auto" style="width: 200px;">
         <input wire:model="search" type="text" class="form-control" placeholder="Search">
         <div class="input-group-append">
             <button type="submit" class="btn btn-default">
@@ -92,18 +109,26 @@
         <table class="table table-hover text-nowrap">
             <thead>
                 <tr class="text-center">
-                    <th width="10%">No</th>
+                    <th width="5%">No</th>
+                    <th width="15%">Logo</th> 
                     <th>Nama Metode</th>
                     <th>Tipe</th>
                     <th>Nomor</th>
                     <th>Atas Nama</th>
-                    <th>Aksi</th>
+                    <th width="20%">Aksi</th>
                 </tr>
             </thead>
             <tbody>
             @forelse ($metodePembayaran as $index => $item)
                 <tr class="text-center">
                     <td>{{ $index + 1 }}</td>
+                    <td>
+                        @if ($item->logo)
+                            <img src="{{ asset('storage/' . $item['logo']) }}" alt="{{ $item->nama }}" height="30">
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td>{{ $item['nama'] }}</td>
                     <td>{{ $item['tipe'] ?? '-' }}</td>
                     <td>{{ $item['nomor'] }}</td>
@@ -123,11 +148,10 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">Belum ada data layanan.</td>
+                    <td colspan="7" class="text-center">Belum ada data metode pembayaran.</td>
                 </tr>
             @endforelse
         </tbody>
-
         </table>
     </div>
 </div>

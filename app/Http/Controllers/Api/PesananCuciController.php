@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\PesananCuci;
 use App\Models\Layanan;
 use App\Models\LayananTambahan;
+use App\Models\PesananCuci;
 use App\Models\UkuranKendaraan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PesananCuciController extends Controller
 {
+
     public function index()
     {
         try {
@@ -19,11 +21,35 @@ class PesananCuciController extends Controller
 
             return response()->json([
                 'message' => 'Data pesanan cuci berhasil diambil.',
-                'data' => $pesanan
+                'data' => $pesanan,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Terjadi kesalahan saat mengambil data.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function getOrders(Request $request)
+    {
+        try {
+            $userId = auth()->user()->id;
+            
+            $orders = PesananCuci::with(['user', 'layanan', 'layananTambahan', 'ukuranKendaraan'])
+                                 ->where('user_id', $userId)
+                                 ->latest() 
+                                 ->get();
+    
+            return response()->json([
+                'success' => true,
+                'data' => $orders,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil riwayat pesanan.',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -31,138 +57,106 @@ class PesananCuciController extends Controller
 
     public function getOptions()
     {
-        return response()->json([
-            'layanans' => Layanan::all(),
-            'layanan_tambahans' => LayananTambahan::all(),
-            'ukuran_kendaraans' => UkuranKendaraan::all(),
-        ]);
+        try {
+            return response()->json([
+                'layanans' => Layanan::all(),
+                'layanan_tambahans' => LayananTambahan::all(),
+                'ukuran_kendaraans' => UkuranKendaraan::all(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal mengambil data opsi.'], 500);
+        }
     }
 
     public function store(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'layanan_id' => 'required|exists:layanans,id',
-        'layanan_tambahan_id' => 'nullable|exists:layanan_tambahans,id',
-        'alamat' => 'required|string',
-        'tanggal' => 'required|date',
-        'waktu' => 'required',
-        'plat_nomor' => 'required|string',
-        'ukuran_kendaraan_id' => 'required|exists:ukuran_kendaraans,id',
-        'status' => 'in:menunggu verifikasi,berhasil,gagal'
-    ]);
+    {
+        $validStatus = ['proses', 'berangkat', 'sampai', 'dicuci', 'selesai', 'gagal'];
 
-    if ($validator->fails()) {
-        return response()->json([
-            'message' => 'Validasi gagal.',
-            'errors' => $validator->errors()
-        ], 422);
-    }
-
-    try {
-        // Ambil harga masing-masing komponen
-        $layanan = Layanan::findOrFail($request->layanan_id);
-        $ukuran = UkuranKendaraan::findOrFail($request->ukuran_kendaraan_id);
-        $layananTambahan = $request->layanan_tambahan_id
-            ? LayananTambahan::findOrFail($request->layanan_tambahan_id)
-            : null;
-
-        // Hitung subtotal dan total
-        $subtotal = $layanan->harga + $ukuran->harga + ($layananTambahan->harga ?? 0);
-        $total = $subtotal; // Tambahkan biaya lain jika ada
-
-        // Buat pesanan
-        $pesanan = PesananCuci::create([
-            'user_id' => $request->user()->id,
-            'layanan_id' => $request->layanan_id,
-            'layanan_tambahan_id' => $request->layanan_tambahan_id,
-            'alamat' => $request->alamat,
-            'tanggal' => $request->tanggal,
-            'waktu' => $request->waktu,
-            'plat_nomor' => $request->plat_nomor,
-            'ukuran_kendaraan_id' => $request->ukuran_kendaraan_id,
-            'subtotal' => $subtotal,
-            'total' => $total,
-            'status' => $request->status ?? 'menunggu verifikasi',
+        $validator = Validator::make($request->all(), [
+            'layanan_id' => 'required|exists:layanans,id',
+            'layanan_tambahan_id' => 'nullable|array', 
+            'layanan_tambahan_id.*' => 'exists:layanan_tambahans,id', 
+            'alamat' => 'required|string',
+            'tanggal' => 'required|date',
+            'waktu' => 'required',
+            'plat_nomor' => 'required|string',
+            'ukuran_kendaraan_id' => 'required|exists:ukuran_kendaraans,id',
+            'status' => ['nullable', Rule::in($validStatus)],
         ]);
 
-      
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validasi gagal.', 'errors' => $validator->errors()], 422);
+        }
 
-        return response()->json([
-            'message' => 'Pesanan berhasil dibuat.',
-            'data' => $pesanan,
-            'detail_subtotal' => [
-                'layanan' => $layanan->harga,
-                'ukuran_kendaraan' => $ukuran->harga,
-                'layanan_tambahan' => $layananTambahan ? $layananTambahan->harga : 0,
+        try {
+            $layanan = Layanan::findOrFail($request->layanan_id);
+            $ukuran = UkuranKendaraan::findOrFail($request->ukuran_kendaraan_id);
+            
+            $layananTambahanIds = $request->layanan_tambahan_id ?? [];
+            $totalHargaTambahan = 0;
+            if (!empty($layananTambahanIds)) {
+                $totalHargaTambahan = LayananTambahan::whereIn('id', $layananTambahanIds)->sum('harga');
+            }
+            
+            $subtotal = $layanan->harga + $totalHargaTambahan;
+            $total = $subtotal + $ukuran->harga;
+
+            $pesanan = PesananCuci::create([
+                'user_id' => $request->user()->id,
+                'layanan_id' => $request->layanan_id,
+                'alamat' => $request->alamat,
+                'tanggal' => $request->tanggal,
+                'waktu' => $request->waktu,
+                'plat_nomor' => $request->plat_nomor,
+                'ukuran_kendaraan_id' => $request->ukuran_kendaraan_id,
                 'subtotal' => $subtotal,
-                'total' => $total
-            ]
-        ], 201);
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Gagal membuat pesanan.',
-            'error' => $e->getMessage()
-        ], 500);
+                'total' => $total,
+                'status' => $request->status ?? 'proses',
+            ]);
+
+            if (!empty($layananTambahanIds)) {
+                $pesanan->layananTambahan()->attach($layananTambahanIds);
+            }
+
+            $pesanan->load('layananTambahan');
+
+            return response()->json(['message' => 'Pesanan berhasil dibuat.', 'data' => $pesanan], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal membuat pesanan.', 'error' => $e->getMessage()], 500);
+        }
     }
-}
 
 
     public function show($id)
     {
         try {
             $pesanan = PesananCuci::with(['user', 'layanan', 'layananTambahan', 'ukuranKendaraan'])->findOrFail($id);
-
-            return response()->json([
-                'message' => 'Detail pesanan ditemukan.',
-                'data' => $pesanan
-            ]);
+            return response()->json(['message' => 'Detail pesanan ditemukan.', 'data' => $pesanan]);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Pesanan tidak ditemukan.',
-                'error' => $e->getMessage()
-            ], 404);
+            return response()->json(['message' => 'Pesanan tidak ditemukan.', 'error' => $e->getMessage()], 404);
         }
     }
 
+
     public function update(Request $request, $id)
     {
+        $validStatus = ['proses', 'berangkat', 'sampai', 'dicuci', 'selesai', 'gagal'];
+        
         $validator = Validator::make($request->all(), [
-            'layanan_id' => 'sometimes|exists:layanans,id',
-            'layanan_tambahan_id' => 'nullable|exists:layanan_tambahans,id',
-            'alamat' => 'sometimes|string',
-            'tanggal' => 'sometimes|date',
-            'waktu' => 'sometimes',
-            'plat_nomor' => 'sometimes|string',
-            'ukuran_kendaraan_id' => 'sometimes|exists:ukuran_kendaraans,id',
-            'subtotal' => 'sometimes|integer',
-            'total' => 'sometimes|integer',
-            'status' => 'in:menunggu verifikasi,berhasil,gagal'
+            'status' => ['sometimes', Rule::in($validStatus)],
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validasi gagal.',
-                'errors' => $validator->errors()
-            ], 422);
+            return response()->json(['message' => 'Validasi gagal.', 'errors' => $validator->errors()], 422);
         }
 
         try {
             $pesanan = PesananCuci::findOrFail($id);
-            $pesanan->update($request->only([
-                'layanan_id', 'layanan_tambahan_id', 'alamat', 'tanggal',
-                'waktu', 'plat_nomor', 'ukuran_kendaraan_id','subtotal',
-                'total', 'status'
-            ]));
+            $pesanan->update($request->all());
 
-            return response()->json([
-                'message' => 'Pesanan berhasil diperbarui.',
-                'data' => $pesanan
-            ]);
+            return response()->json(['message' => 'Pesanan berhasil diperbarui.', 'data' => $pesanan]);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal memperbarui pesanan.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Gagal memperbarui pesanan.', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -172,14 +166,9 @@ class PesananCuciController extends Controller
             $pesanan = PesananCuci::findOrFail($id);
             $pesanan->delete();
 
-            return response()->json([
-                'message' => 'Pesanan berhasil dihapus.'
-            ]);
+            return response()->json(['message' => 'Pesanan berhasil dihapus.']);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Gagal menghapus pesanan.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Gagal menghapus pesanan.', 'error' => $e->getMessage()], 500);
         }
     }
 }

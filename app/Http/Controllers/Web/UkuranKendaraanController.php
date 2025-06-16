@@ -8,14 +8,12 @@ use Illuminate\Http\Request;
 
 class UkuranKendaraanController extends Controller
 {
-    // Tampilkan semua data
     public function index()
     {
         $ukuranKendaraans = UkuranKendaraan::latest()->get();
         return view('admin.ukuran-kendaraan.index', compact('ukuranKendaraans'));
     }
 
-    // Simpan data baru
     public function store(Request $request)
     {
         $request->validate([
@@ -31,7 +29,6 @@ class UkuranKendaraanController extends Controller
         return redirect()->back()->with('success', 'Ukuran kendaraan berhasil ditambahkan.');
     }
 
-    // Update data
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -48,7 +45,6 @@ class UkuranKendaraanController extends Controller
         return redirect()->back()->with('success', 'Ukuran kendaraan berhasil diperbarui.');
     }
 
-    // Hapus data
     public function destroy($id)
     {
         $ukuran = UkuranKendaraan::findOrFail($id);

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 class LayananController extends Controller
 {
-    // Tampilkan semua layanan
     public function index()
     {
         try {
@@ -29,7 +28,6 @@ class LayananController extends Controller
         }
     }
 
-    // Simpan layanan baru
     public function store(Request $request)
     {
         try {
@@ -66,7 +64,6 @@ class LayananController extends Controller
         }
     }
 
-    // Tampilkan layanan berdasarkan id
     public function show($id)
     {
         try {
@@ -87,7 +84,6 @@ class LayananController extends Controller
         }
     }
 
-    // Update layanan
     public function update(Request $request, $id)
     {
         try {
@@ -134,7 +130,6 @@ class LayananController extends Controller
         }
     }
 
-    // Hapus layanan
     public function destroy($id)
     {
         try {

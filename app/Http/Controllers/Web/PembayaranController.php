@@ -9,6 +9,7 @@ use App\Models\PesananCuci;
 use App\Models\MetodePembayaran;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class PembayaranController extends Controller
 {
@@ -57,23 +58,22 @@ class PembayaranController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:menunggu verifikasi,berhasil,gagal',
+            'status' => ['required', Rule::in(['proses', 'berhasil', 'gagal'])],
         ]);
 
         try {
             DB::beginTransaction();
 
-            $pembayaran = Pembayaran::with('pesanan')->findOrFail($id);
+            $pembayaran = Pembayaran::findOrFail($id);
+
             $pembayaran->status = $request->status;
             $pembayaran->save();
 
-            $pesanan = $pembayaran->pesanan;
-            $pesanan->status = $request->status;
-            $pesanan->save();
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Status pembayaran dan pesanan berhasil diperbarui.');
+            return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Gagal update status pembayaran: ' . $e->getMessage());

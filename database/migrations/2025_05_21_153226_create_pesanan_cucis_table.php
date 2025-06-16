@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('ukuran_kendaraan_id')->constrained('ukuran_kendaraans')->onDelete('cascade');
             $table->integer('subtotal');
             $table->integer('total');
-            $table->enum('status', ['menunggu verifikasi', 'berhasil', 'gagal'])->default('menunggu verifikasi');
+            $table->enum('status', ['proses', 'berangkat','sampai', 'dicuci','selesai', 'gagal'])->default('proses');
 
             $table->timestamps();
         });

@@ -13,16 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('metode_pembayarans', function (Blueprint $table) {
+        // Tabel ini akan menghubungkan pesanan dengan layanan tambahannya
+        Schema::create('pesanan_cuci_layanan_tambahan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('tipe');
-            $table->string('nomor');
-            $table->string('atas_nama');
-            $table->string('logo')->nullable(); // <-- TAMBAHKAN BARIS INI
+            $table->foreignId('pesanan_cuci_id')->constrained()->onDelete('cascade');
+            $table->foreignId('layanan_tambahan_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('metode_pembayarans');
+        Schema::dropIfExists('pesanan_cuci_layanan_tambahan');
     }
 };

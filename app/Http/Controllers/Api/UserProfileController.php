@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserProfileController extends Controller
 {
-    // Menampilkan profil user yang sedang login
     public function getProfile(Request $request)
     {
         try {
@@ -33,12 +32,10 @@ class UserProfileController extends Controller
         }
     }
 
-    // Memperbarui profil user yang sedang login
     public function updateProfile(Request $request)
 {
     $user = $request->user();
 
-    // Validasi input, termasuk email dengan aturan unik kecuali untuk user yang sedang update
     $validator = Validator::make($request->all(), [
         'nama' => 'sometimes|required|string|max:255',
         'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
@@ -68,12 +65,10 @@ class UserProfileController extends Controller
         }
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
             if ($user->foto && Storage::disk('public')->exists($user->foto)) {
                 Storage::disk('public')->delete($user->foto);
             }
 
-            // Simpan foto baru
             $path = $request->file('foto')->store('foto_profil', 'public');
             $user->foto = $path;
         }

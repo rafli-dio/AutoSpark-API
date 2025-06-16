@@ -9,8 +9,6 @@ class PesananCuci extends Model
 {
     use HasFactory;
 
-    protected $table = 'pesanan_cucis';
-
     protected $fillable = [
         'user_id',
         'layanan_id',
@@ -25,35 +23,26 @@ class PesananCuci extends Model
         'status',
     ];
 
-    // Relasi dengan User
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
-    // Relasi dengan Layanan
     public function layanan()
     {
-        return $this->belongsTo(Layanan::class);
+        return $this->belongsTo(Layanan::class, 'layanan_id');
     }
 
-    // Relasi dengan Layanan Tambahan (nullable)
+
     public function layananTambahan()
     {
-        return $this->belongsTo(LayananTambahan::class);
+        return $this->belongsToMany(LayananTambahan::class, 'pesanan_cuci_layanan_tambahan');
     }
 
-    // Relasi dengan Ukuran Kendaraan
+ 
     public function ukuranKendaraan()
     {
-        return $this->belongsTo(UkuranKendaraan::class);
+        return $this->belongsTo(UkuranKendaraan::class, 'ukuran_kendaraan_id');
     }
 
-    // Relasi dengan Riwayat Pesanan
-    public function pembayaran()
+    public function user()
     {
-        return $this->hasMany(Pembayaran::class, 'pesanan_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
-
-
 }

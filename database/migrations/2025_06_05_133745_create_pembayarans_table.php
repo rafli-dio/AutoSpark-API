@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('pesanan_id')->constrained('pesanan_cucis')->onDelete('cascade');
             $table->foreignId('metode_pembayaran_id')->nullable()->constrained('metode_pembayarans')->onDelete('cascade');
             $table->string('bukti_pembayaran')->nullable(); 
-            $table->enum('status', ['menunggu verifikasi', 'berhasil', 'gagal'])->default('menunggu verifikasi');
+            $table->enum('status', ['proses', 'selesai', 'gagal'])->default('proses');
             $table->timestamps();
         });
     }

@@ -43,7 +43,8 @@ Route::middleware('admin.web')->group(function () {
 
     // Pesanan Routes
     Route::get('/admin-autoSpark/pesanan-cuci', [PesananController::class, 'index'])->name('get-pesanan-cuci-admin');
-
+    Route::put('/admin-autoSpark/pesanan-cuci/{id}/update-status', [PesananController::class, 'update'])->name('update-pesanan-cuci-admin');
+  
     // Pembayaran Routes
     Route::get('/admin-autoSpark/pembayaran', [PembayaranController::class, 'index'])->name('get-pembayaran-admin');
     Route::put('/admin-autoSpark/pembayaran/{id}/update-status', [PembayaranController::class, 'updateStatus'])->name('update-status-pembayaran-admin');

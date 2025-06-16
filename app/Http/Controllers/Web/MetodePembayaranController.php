@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MetodePembayaran;
+use Illuminate\Support\Facades\Storage; // <-- Tambahkan import ini
 
 class MetodePembayaranController extends Controller
 {
@@ -19,7 +20,6 @@ class MetodePembayaranController extends Controller
         return view('Admin.metode-pembayaran.index', compact('metodePembayaran'));
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -28,14 +28,22 @@ class MetodePembayaranController extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
+        $request->validate([
             'nama' => 'required|string|max:255',
             'tipe' => 'required|string|max:255',
             'nomor' => 'required|string|max:255',
             'atas_nama' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048', 
         ]);
 
-        MetodePembayaran::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('logos', 'public');
+            $data['logo'] = $path;
+        }
+
+        MetodePembayaran::create($data);
 
         return redirect()->route('get-metode-pembayaran-admin')->with('success', 'Metode pembayaran berhasil ditambahkan');
     }
@@ -48,7 +56,7 @@ class MetodePembayaranController extends Controller
      */
     public function show($id)
     {
-        //
+        // Biasanya tidak digunakan di CRUD admin web standar, bisa dikosongkan
     }
 
 
@@ -61,15 +69,26 @@ class MetodePembayaranController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $request->validate([
+        $request->validate([
             'nama' => 'required|string|max:255',
             'tipe' => 'required|string|max:255',
             'nomor' => 'required|string|max:255',
             'atas_nama' => 'required|string|max:255',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
         ]);
 
         $metode = MetodePembayaran::findOrFail($id);
-        $metode->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('logo')) {
+            if ($metode->logo) {
+                Storage::disk('public')->delete($metode->logo);
+            }
+            $path = $request->file('logo')->store('logos', 'public');
+            $data['logo'] = $path;
+        }
+
+        $metode->update($data);
 
         return redirect()->route('get-metode-pembayaran-admin')->with('success', 'Metode pembayaran berhasil diupdate');
     }
@@ -80,10 +99,14 @@ class MetodePembayaranController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-      // Hapus metode pembayaran
     public function destroy($id)
     {
         $metode = MetodePembayaran::findOrFail($id);
+
+        if ($metode->logo) {
+            Storage::disk('public')->delete($metode->logo);
+        }
+
         $metode->delete();
 
         return redirect()->route('get-metode-pembayaran-admin')->with('success', 'Metode pembayaran berhasil dihapus');

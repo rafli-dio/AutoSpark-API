@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         try {
@@ -33,9 +34,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -63,7 +61,6 @@ class UserController extends Controller
             $data = $request->except('password');
             $data['password'] = Hash::make($request->password);
 
-            // Handle upload foto
             if ($request->hasFile('foto')) {
                 $file = $request->file('foto');
                 $filename = time() . '_' . Str::slug($request->nama) . '.' . $file->getClientOriginalExtension();
@@ -89,9 +86,7 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show($id)
     {
         try {
@@ -119,9 +114,7 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, $id)
     {
         try {
@@ -157,14 +150,11 @@ class UserController extends Controller
 
             $updateData = $request->except(['password', 'foto']);
 
-            // Update password jika ada
             if ($request->has('password')) {
                 $updateData['password'] = Hash::make($request->password);
             }
 
-            // Handle upload foto baru
             if ($request->hasFile('foto')) {
-                // Hapus foto lama jika ada
                 if ($user->foto && Storage::disk('public')->exists($user->foto)) {
                     Storage::disk('public')->delete($user->foto);
                 }
@@ -193,9 +183,7 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy($id)
     {
         try {

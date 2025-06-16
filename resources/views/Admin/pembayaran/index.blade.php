@@ -37,8 +37,8 @@
                         <td>#{{ $item->pesanan->id }}</td>
                         <td>{{ $item->metodePembayaran->nama ?? '-' }}</td>
                         <td>
-                            @if ($item->status == 'menunggu verifikasi')
-                                <span class="badge badge-warning">Menunggu Verifikasi</span>
+                            @if ($item->status == 'proses')
+                                <span class="badge badge-warning">proses</span>
                             @elseif ($item->status == 'gagal')
                                 <span class="badge badge-danger">Gagal</span>
                             @else
@@ -58,7 +58,7 @@
                                 @csrf
                                 @method('PUT')
                                 <select name="status" class="form-control form-control-sm d-inline-block" style="width: 140px;" onchange="this.form.submit()">
-                                    <option value="menunggu verifikasi" style="color: #856404; background-color: #fff3cd;" {{ $item->status == 'menunggu verifikasi' ? 'selected' : '' }}>Menunggu Verifikasi</option>
+                                    <option value="proses" style="color: #856404; background-color: #fff3cd;" {{ $item->status == 'proses' ? 'selected' : '' }}>proses</option>
                                     <option value="berhasil" style="color: #155724; background-color: #d4edda;" {{ $item->status == 'berhasil' ? 'selected' : '' }}>Berhasil</option>
                                     <option value="gagal" style="color: #721c24; background-color: #f8d7da;" {{ $item->status == 'gagal' ? 'selected' : '' }}>Gagal</option>
                                 </select>

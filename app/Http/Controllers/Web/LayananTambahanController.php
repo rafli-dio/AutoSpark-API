@@ -109,8 +109,8 @@ class LayananTambahanController extends Controller
     {
         $layanan = LayananTambahan::findOrFail($id);
 
-        if ($layanan->gambar && \Storage::disk('public')->exists($layanan->gambar)) {
-            \Storage::disk('public')->delete($layanan->gambar);
+        if ($layanan->gambar && Storage::disk('public')->exists($layanan->gambar)) {
+            Storage::disk('public')->delete($layanan->gambar);
         }
 
         $layanan->delete();

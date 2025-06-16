@@ -103,12 +103,6 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="{{route('get-user-pegawai')}}" class="nav-link @yield('active-pegawai')">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Pegawai</p>
-              </a>
-            </li>
-            <li class="nav-item">
               <a href="{{route('get-user-pengguna')}}" class="nav-link @yield('active-pengguna')">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Pengguna</p>

@@ -12,7 +12,6 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            // Validasi input
             $request->validate([
                 'nama' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users',
@@ -22,13 +21,11 @@ class AuthController extends Controller
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             ]);
 
-            // Proses simpan foto (jika ada)
             $fotoPath = null;
             if ($request->hasFile('foto')) {
                 $fotoPath = $request->file('foto')->store('user_photos', 'public');
             }
 
-            // Simpan user
             $user = User::create([
                 'nama' => $request->nama,
                 'email' => $request->email,
@@ -62,7 +59,6 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            // Validasi input
             $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',
